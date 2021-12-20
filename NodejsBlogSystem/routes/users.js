@@ -77,5 +77,9 @@ router.post('/users/login', checkNotAuthenticated, (req, res, next) => {
     res.redirect('/users/login')
  })
 
+ // profile form
+router.get('/users/profile', (req, res) => {
+    res.render('users/profile.ejs')
+})
 
 module.exports = router
