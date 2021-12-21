@@ -1,7 +1,7 @@
 <%- include('../partials/_header.ejs') %>
 <%- include('../partials/_navbar.ejs') %>
 
-<div class="row p-5 mt-5">
+<!-- <div class="row p-5 mt-5">
     <div class="col-md-4"></div>
     <div class="col-md-4 text-center">
         <div class="container">
@@ -33,7 +33,57 @@
     </div>
     <div class="col-md-4"></div>
 
-</div>
+</div> -->
+    
+	<div class="loginBkg">
+	<div class="bkgMask">
+	<div class="dailyWord">
+			一只神圣往昔的健壮乌鸦慢慢走进我房间；</br>
+			它既没向我致意问候；也没有片刻的停留；</br>
+			而已绅士淑女的风度，栖在我的房门的上面——</br>
+			栖在我房门上方一尊帕拉斯半身雕像上面——</br>
+			栖坐在那儿，仅如此这般。</br>
+			——&laquo乌鸦&raquo &nbsp; 爱伦·坡</br>
+			
+	</div>
+    <div class="login-position">
+    <div class="login-input">
+		
+        <div class="container">
+            <h3 class="text-center mb-3">
+                <i class="fas fa-user-plus"></i> Login Form
+            </h3>
+        
+            <form action="/users/login" method="POST">
+        
+                <div class="form-group">
+                <input type="email" placeholder="Email" name="email" class="form-control"  required />
+                </div>
+        
+                <div class="form-group">
+                <input type="password" name="password" placeholder="Password" class="form-control"  required />
+                </div>
+        
+        
+                <button class="btn btn-success btn-block" type="submit">Login</button>
+        
+            </form>
+            <p class="lead mt-4">还没有账号?<a href="/users/register"> 注册</a></p>
+            <br>
+        
+        </div>
+
+        <%- include('../partials/_messages.ejs') %>
+    </div>
+	</div>
+	</div>
+	</div>
+	<div id="foot">
+		<h4 style="margin-top: 25px;" class="white-text">华南师范大学中级软件实作</h3>
+		<h5 class="white-text">2021.12.21</h5>
+	</div>
+    
+
 
 
 
