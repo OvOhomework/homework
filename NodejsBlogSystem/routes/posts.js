@@ -37,7 +37,8 @@ router.get('/editprofile', checkAuthenticated, async (req, res) => {
       const posts = await Post.find().sort('-date')
 
       res.render('posts/editprofile.ejs', {  
-          posts : posts
+          posts : posts,
+          author: req.body.author,
       })
   }   catch(err) {
       console.log(err)
