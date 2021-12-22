@@ -1,13 +1,14 @@
 <!--
  * @Author: your name
  * @Date: 2021-12-20 22:53:01
- * @LastEditTime: 2021-12-20 22:55:48
+ * @LastEditTime: 2021-12-22 10:14:23
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \work\NodejsBlogSystem\views\users\editprofile.ejs
 -->
 <%- include('../partials/_header.ejs') %>
 <%- include('../partials/_navbar.ejs') %>
+<<<<<<< HEAD
 <main>
     <%- include('../partials/_messages.ejs') %>
     <div class="regBkg ">
@@ -19,7 +20,7 @@
                     <i></i> 用户信息修改
                 </h3>
 
-				<% users.forEach(users => { %>
+				<% user.forEach(users => { %>
 				<form action="/editprofile" method="post">
 				    <div class="form-group">
 				    <input type="text" name="name" placeholder="你的名字" value="<%= users.name %>"  class="form-control" 
@@ -135,5 +136,6 @@ socket.on('server:postCreated', (resData) => {
     })
 })
 </script> -->
+
 
 <%- include('../partials/_footer.ejs')%>

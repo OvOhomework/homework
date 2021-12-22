@@ -44,6 +44,7 @@ router.get('/editprofile', checkAuthenticated, async (req, res) => {
 		  user : user,
 		})
 		console.log(user)
+
   }   catch(err) {
       console.log(err)
   }
