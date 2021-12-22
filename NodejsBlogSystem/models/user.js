@@ -20,7 +20,22 @@ const userSchema = new mongoose.Schema({
         minlength: 5,  
         maxlength: 255,
         required : true,
-    }
+    },
+	address : {
+	    type: String,
+	    trim: true,
+	    unique: true,
+	},
+	userimg : {
+	    type: String,
+	    trim: true,
+	    unique: true,
+	},
+	usermotto : {
+	    type: String,
+	    trim: true,
+	    unique: true,
+	},
 })
 
 const User = mongoose.model('User', userSchema)
@@ -32,6 +47,7 @@ function validateUser(user) {
         email : Joi.string().required().min(5).max(250).email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
         password : Joi.string().required().min(5).max(255).pattern(/^[a-zA-Z0-9]{3,30}$/),
         confirmPassword : Joi.any().required().valid(Joi.ref('password'))
+
     })
 
     return schema.validate(user);

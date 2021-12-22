@@ -37,7 +37,10 @@ router.post('/users/register', checkNotAuthenticated, async(req, res) => {
         const user = new User({
             name : req.body.name,
             email : req.body.email,
-            password  : req.body.password    
+            password  : req.body.password ,
+			address : null,
+			userimg : null,
+			usermotto : null,
         })
 
         const salt = await bcrypt.genSalt(10)
@@ -54,7 +57,10 @@ router.post('/users/register', checkNotAuthenticated, async(req, res) => {
             name : req.body.name,
             email : req.body.email,
             password  : req.body.password,
-            confirmPassword  : req.body.confirmPassword
+            confirmPassword  : req.body.confirmPassword,
+			address : null,
+			userimg : null,
+			usermotto : null,
         })
     }
 

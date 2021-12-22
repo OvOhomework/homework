@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require('mongoose')
 const { Post, validatePost } = require("../models/post");
+const { User } = require('../models/user')
 const { Comment } = require("../models/comment")
 const { Category } = require("../models/category")
 const {checkAuthenticated, checkNotAuthenticated} = require('../middleware/auth')
+
 
 
 // get all posts
@@ -34,14 +36,51 @@ router.get('/profile', checkAuthenticated, async (req, res) => {
 //editprofile 
 router.get('/editprofile', checkAuthenticated, async (req, res) => {  
   try {
-      const posts = await Post.find().sort('-date')
-
-      res.render('posts/editprofile.ejs', {  
-          posts : posts
-      })
+		const posts = await Post.find().sort('-date')
+		const user = await User.find({_id:req.session.passport.user});
+		console.log(req.session.passport)
+		res.render('posts/editprofile.ejs', {  
+          posts : posts,
+		  user : user,
+		})
+		console.log(user)
   }   catch(err) {
       console.log(err)
   }
+})
+router.post('/editprofile', checkNotAuthenticated, async(req, res) => {
+	
+	user.set(req.body);
+    const { error } = validateUser(req.body)
+	
+    if(error) {
+        return res.render('posts/editprofile.ejs', {
+            errors : error.details[0].message,
+            name : req.body.name,
+            email : req.body.email,
+            password  : req.body.password,
+        })
+    } 
+
+    try {
+
+
+        const hashedPassword = await bcrypt.hash(user.password, salt)
+        user.password = hashedPassword;
+        await user.save()
+
+        await req.flash('success_msg', "You are now edit profile")
+        res.redirect('/profile')
+
+    }   catch(error) {
+        return res.render('posts/editprofile.ejs', {
+            errors : error,
+            name : req.body.name,
+            email : req.body.email,
+            password  : req.body.password,
+        })
+    }
+
 })
 
 // New post Route
@@ -112,6 +151,7 @@ router.get("/posts/edit/:id",checkAuthenticated, async (req, res) => {
   const posts = new Post()
   try {
     const post = await Post.findById(req.params.id).populate('category').exec();
+	console.log(post)
     res.render("posts/editpost.ejs", {
       post: post,
       categories : categories,
