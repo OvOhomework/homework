@@ -19,8 +19,30 @@ router.get('/posts', checkAuthenticated, async (req, res) => {
       console.log(err)
   }
 })
+//profile get database from posts
+router.get('/profile', checkAuthenticated, async (req, res) => {  
+  try {
+      const posts = await Post.find().sort('-date')
 
+      res.render('posts/profile.ejs', {  
+          posts : posts
+      })
+  }   catch(err) {
+      console.log(err)
+  }
+})
+//editprofile 
+router.get('/editprofile', checkAuthenticated, async (req, res) => {  
+  try {
+      const posts = await Post.find().sort('-date')
 
+      res.render('posts/editprofile.ejs', {  
+          posts : posts
+      })
+  }   catch(err) {
+      console.log(err)
+  }
+})
 
 // New post Route
 router.get("/posts/add", checkAuthenticated, async(req, res) => {

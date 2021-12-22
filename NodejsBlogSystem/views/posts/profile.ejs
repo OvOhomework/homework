@@ -1,0 +1,80 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-12-13 16:37:53
+ * @LastEditTime: 2021-12-22 09:56:01
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \work\NodejsBlogSystem\views\users\profile.ejs
+-->
+<%- include('../partials/_header.ejs') %>
+<%- include('../partials/_navbar.ejs') %>
+
+<main class="py-5">
+   <%- include('../partials/_messages.ejs') %>   
+   
+   <section id="posts">
+    <br><br><br>
+    <p class="lead mt-4">已有账户? <a href="/editprofile">焯</a></p>
+    <% posts.forEach(post => { %>
+        <div class="card m-5 p-4">
+            <div class="card-body">
+                <h2 class="card-title bg-light"><%= post.title %> </h2>  
+                <img class="main-image" height="270px" src="<%= post.mainImagePath %>" /><br />
+                <hr/>
+                <%- post.body.substring(0, 460) %>...
+                <hr/>
+                <a href="/posts/<%=post._id%>" class="btn btn-dark">View Full Post</a>
+                <hr />
+                 Posted by <b><%=post.author %></b> on <b><%= post.date %></b>
+                <hr/>
+            </div>
+        </div>
+    <% }) %> 
+   </section>
+
+</main>
+
+
+
+<script>
+
+const socket = io()
+
+function renderTemplate(item, imgStr) {
+    return `
+    <div class="card m-5 p-4">
+        <div class="card-body">
+            <h2 class="card-title bg-light">${item.title}</h2>  
+            <img class="main-image" height="270px" src="${imgStr}" /><br />
+            <hr/>
+            ${item.body.substring(0, 460)}...
+            <hr/>
+            <a href="/posts/${item._id}" class="btn btn-dark">View Full Post</a>
+            <hr />
+             Posted by <b><${item.author}</b> on <b>${item.date}</b>
+            <hr/>
+        </div>
+    </div>
+`
+}
+
+let section = document.getElementById('posts')
+
+socket.on('server:postCreated', (resData) => {
+    fetch('/api/posts')
+    .then(res => res.json())
+    .then(data => {
+        section.innerHTML = data.map(item => {
+            let img = btoa(
+                new Uint8Array(item.mainImage.data)
+                .reduce((data, byte) => data + String.fromCharCode(byte), '')  
+            );
+            let imgStr = `data:${item.mainImageType};base64,${img}`
+            return renderTemplate(item, imgStr);
+        })
+    })
+})
+</script>
+
+
+<%- include('../partials/_footer.ejs') %>

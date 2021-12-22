@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-12 17:04:43
- * @LastEditTime: 2021-12-20 22:55:03
+ * @LastEditTime: 2021-12-22 09:38:34
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \work\NodejsBlogSystem\routes\users.js
@@ -85,14 +85,15 @@ router.post('/users/login', checkNotAuthenticated, (req, res, next) => {
     res.redirect('/users/login')
  })
 
- // profile form
-router.get('/users/profile', (req, res) => {
-    res.render('users/profile.ejs')
-})
+// // profile form
+// router.get('/posts/profile', (req, res) => {
+//     res.render('posts/profile.ejs')
+// })
 
-//edit profile form
-router.get('/users/editprofile', (req, res) => {
-    res.render('users/editprofile.ejs')
-})
+
+// //edit profile form
+// router.get('/users/editprofile', (req, res) => {
+//     res.render('users/editprofile.ejs')
+// })
 
 module.exports = router
