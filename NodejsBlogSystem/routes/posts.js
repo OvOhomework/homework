@@ -25,10 +25,12 @@ router.get('/posts', checkAuthenticated, async (req, res) => {
 router.get('/profile', checkAuthenticated, async (req, res) => {  
   try {
       const posts = await Post.find().sort('-date')
-
+	  const user = await User.find({_id:req.session.passport.user});
       res.render('posts/profile.ejs', {  
-          posts : posts
+          posts : posts,
+		  user : user,
       })
+	  console.log(user)
   }   catch(err) {
       console.log(err)
   }
@@ -43,7 +45,6 @@ router.get('/editprofile', checkAuthenticated, async (req, res) => {
           posts : posts,
 		  user : user,
 		})
-		console.log(user)
 
   }   catch(err) {
       console.log(err)
@@ -65,7 +66,7 @@ router.post('/editprofile', checkNotAuthenticated, async(req, res) => {
 
     try {
 
-
+		const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(user.password, salt)
         user.password = hashedPassword;
         await user.save()
@@ -152,7 +153,6 @@ router.get("/posts/edit/:id",checkAuthenticated, async (req, res) => {
   const posts = new Post()
   try {
     const post = await Post.findById(req.params.id).populate('category').exec();
-	console.log(post)
     res.render("posts/editpost.ejs", {
       post: post,
       categories : categories,
