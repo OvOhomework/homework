@@ -26,7 +26,8 @@ router.get('/posts', checkAuthenticated, async (req, res) => {
 router.get('/profile', checkAuthenticated, async (req, res) => {  
   try {
       const posts = await Post.find().sort('-date')
-	  const user = await User.find({_id:req.session.passport.user});
+	  const users = await User.find({_id:req.session.passport.user});
+	  user = users[0];
       res.render('posts/profile.ejs', {  
           posts : posts,
 		  user : user,
