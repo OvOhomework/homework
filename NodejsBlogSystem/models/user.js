@@ -44,20 +44,9 @@ function validateUser(user) {
 
     const schema = Joi.object({
         name : Joi.string().required().min(5).max(50),
-
-
-    })
-
-    return schema.validate(user);
-}
-function validateEdit(user) {
-
-    const schema = Joi.object({
-        name : Joi.string().required().min(5).max(50),
-        email : Joi.string().required().min(5).max(250).email({ tlds: { allow: ['com', 'net'] } }),
+        email : Joi.string().required().min(5).max(250).email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
         password : Joi.string().required().min(5).max(255).pattern(/^[a-zA-Z0-9]{3,30}$/),
         confirmPassword : Joi.any().required().valid(Joi.ref('password'))
-
     })
 
     return schema.validate(user);
@@ -65,12 +54,15 @@ function validateEdit(user) {
 
 module.exports.User = User
 module.exports.validateUser = validateUser
-module.exports.validateEdit= validateEdit
 
 
 // checking for unique email
 userSchema.path('email').validate(async (value) => {
     const emailCount = await mongoose.models.User.countDocuments({email: value });
+	console.log(emailCount)
+	// if (req.isAuthenticated()) {
+	//   return res.redirect("/posts");
+	// }
     return !emailCount;
   }, 'The given email already exists. Try new email');
 

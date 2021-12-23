@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("@hapi/joi");
 const {commentSchema} = require('./comment')
+const {userSchema} = require('./user')
 
 
 const postSchema = new mongoose.Schema({
@@ -82,6 +83,25 @@ function validatePost(post) {
   return schema.validate(post); 
 }
 
+
+
+const User = mongoose.model('User', userSchema)
+
+
+function validateEdit(user) {
+
+    const schema = Joi.object({
+        name : Joi.string().required().min(5).max(50),
+        email : Joi.string().required().min(5).max(250).email({ tlds: { allow: ['com', 'net'] } }),
+        password : Joi.string().required().min(5).max(255).pattern(/^[a-zA-Z0-9]{3,30}$/),
+        confirmPassword : Joi.any().required().valid(Joi.ref('password'))
+
+    })
+
+    return schema.validate(user);
+}
+
+module.exports.validateEdit= validateEdit
 
 module.exports.Post = Post;
 module.exports.validatePost = validatePost;
