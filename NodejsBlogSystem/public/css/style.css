@@ -183,6 +183,13 @@ header,
 	background-position: -50px;
 	background-attachment: fixed; 
 }
+.editBkg{
+	height: 100%;
+	width: 100%;
+	background-image: url("../img/background 1.jpg");
+	background-position: 0px;
+	background-attachment: fixed; 
+}
 
 .bkgMask{
 	width: 100%;
@@ -194,6 +201,15 @@ header,
 	position: absolute;
 	width: 100%;
 	height: 170px;
+	background-color: black;
+	text-align: center;
+	box-shadow: 2px 2px 4px 2px black;
+}
+
+#foot1{
+	position: absolute;
+	width: 100%;
+	height: 130px;
 	background-color: black;
 	text-align: center;
 	box-shadow: 2px 2px 4px 2px black;
