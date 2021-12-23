@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose')
 const { Post, validatePost } = require("../models/post");
-const { User } = require('../models/user')
+const { User ,validateEdit} = require('../models/user')
 const { Comment } = require("../models/comment")
 const { Category } = require("../models/category")
 const {checkAuthenticated, checkNotAuthenticated} = require('../middleware/auth')
@@ -30,7 +31,6 @@ router.get('/profile', checkAuthenticated, async (req, res) => {
           posts : posts,
 		  user : user,
       })
-	  console.log(user)
   }   catch(err) {
       console.log(err)
   }
@@ -39,8 +39,8 @@ router.get('/profile', checkAuthenticated, async (req, res) => {
 router.get('/editprofile', checkAuthenticated, async (req, res) => {  
   try {
 		const posts = await Post.find().sort('-date')
-		const user = await User.find({_id:req.session.passport.user});
-		console.log(req.session.passport)
+		const users = await User.find({_id:req.session.passport.user});
+		user=users[0];
 		res.render('posts/editprofile.ejs', {  
           posts : posts,
 		  user : user,
@@ -50,22 +50,22 @@ router.get('/editprofile', checkAuthenticated, async (req, res) => {
       console.log(err)
   }
 })
-router.post('/editprofile', checkNotAuthenticated, async(req, res) => {
+router.post('/editprofile', checkAuthenticated, async(req, res) => {
+	const users = await User.find({_id:req.session.passport.user});
+	const user = users[0];
+	console.log(user)
 	
-	user.set(req.body);
-    const { error } = validateUser(req.body)
-	
+	const { error } = validateEdit(req.body)
     if(error) {
         return res.render('posts/editprofile.ejs', {
             errors : error.details[0].message,
-            name : req.body.name,
-            email : req.body.email,
-            password  : req.body.password,
+			user : user,
         })
     } 
 
     try {
-
+		user.set(req.body);
+		
 		const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(user.password, salt)
         user.password = hashedPassword;
@@ -77,9 +77,7 @@ router.post('/editprofile', checkNotAuthenticated, async(req, res) => {
     }   catch(error) {
         return res.render('posts/editprofile.ejs', {
             errors : error,
-            name : req.body.name,
-            email : req.body.email,
-            password  : req.body.password,
+            user : user,
         })
     }
 
@@ -166,6 +164,7 @@ router.get("/posts/edit/:id",checkAuthenticated, async (req, res) => {
 // submit edit post form
 router.post("/posts/edit/:id", checkAuthenticated, async (req, res) => {
   const post = await Post.findById(req.params.id);
+  console.log(post)
   try {
     post.set(req.body);
     const { error } = validatePost(req.body);

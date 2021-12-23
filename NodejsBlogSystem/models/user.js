@@ -44,7 +44,17 @@ function validateUser(user) {
 
     const schema = Joi.object({
         name : Joi.string().required().min(5).max(50),
-        email : Joi.string().required().min(5).max(250).email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+
+
+    })
+
+    return schema.validate(user);
+}
+function validateEdit(user) {
+
+    const schema = Joi.object({
+        name : Joi.string().required().min(5).max(50),
+        email : Joi.string().required().min(5).max(250).email({ tlds: { allow: ['com', 'net'] } }),
         password : Joi.string().required().min(5).max(255).pattern(/^[a-zA-Z0-9]{3,30}$/),
         confirmPassword : Joi.any().required().valid(Joi.ref('password'))
 
@@ -55,6 +65,7 @@ function validateUser(user) {
 
 module.exports.User = User
 module.exports.validateUser = validateUser
+module.exports.validateEdit= validateEdit
 
 
 // checking for unique email
