@@ -63,15 +63,28 @@ router.post('/editprofile', checkAuthenticated, async(req, res) => {
 			user : user,
         })
     } 
-
+	else {
+		
+	}
     try {
 		user.set(req.body);
 		
 		const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(user.password, salt)
         user.password = hashedPassword;
-        await user.save()
-
+		console.log(user)
+        await user.update({name:req.body.name})
+		try{
+			await user.update({email:req.body.email})
+		}catch(error){
+			return res.render('posts/editprofile.ejs', {
+			    errors :'The given email already exists. Try new email' ,
+			    user : user,
+			})
+		}
+		
+		await user.update({password:hashedPassword})
+		await user.update({confirmPassword:hashedPassword})
         await req.flash('success_msg', "You are now edit profile")
         res.redirect('/profile')
 
