@@ -51,7 +51,7 @@ router.get('/editprofile', checkAuthenticated, async (req, res) => {
       console.log(err)
   }
 })
-router.post('/editprofile', checkAuthenticated, async(req, res) => {
+router.post('/editprofile', checkAuthenticated, async(req, res, next) => {
 	const users = await User.find({_id:req.session.passport.user});
 	const user = users[0];
 	console.log(user)
@@ -63,30 +63,34 @@ router.post('/editprofile', checkAuthenticated, async(req, res) => {
 			user : user,
         })
     } 
-	else {
 		
-	}
+
     try {
-		user.set(req.body);
+      if(req.body.password=="bukeneng") {req.body.password=user.password}
+      else {
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(req.body.password, salt)
+        req.body.password = hashedPassword;
+      }
+      
+		  user.set(req.body);
+      
+		  
+		  console.log(user)
+      await user.update({name:req.body.name})
+		  try{
+			  await user.update({email:req.body.email})
+		  }catch(error){
+			  return res.render('posts/editprofile.ejs', {
+			  errors :'The given email already exists. Try new email' ,
+			  user : user,
+			  })
+		  }
 		
-		const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(user.password, salt)
-        user.password = hashedPassword;
-		console.log(user)
-        await user.update({name:req.body.name})
-		try{
-			await user.update({email:req.body.email})
-		}catch(error){
-			return res.render('posts/editprofile.ejs', {
-			    errors :'The given email already exists. Try new email' ,
-			    user : user,
-			})
-		}
-		
-		await user.update({password:hashedPassword})
-		await user.update({confirmPassword:hashedPassword})
-        await req.flash('success_msg', "You are now edit profile")
-        res.redirect('/profile')
+		  await user.update({password:req.body.password})
+		  await user.update({confirmPassword:req.body.password})
+      await req.flash('success_msg', "You are now edit profile")
+      res.redirect('/profile')
 
     }   catch(error) {
         return res.render('posts/editprofile.ejs', {

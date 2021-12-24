@@ -93,9 +93,7 @@ function validateEdit(user) {
     const schema = Joi.object({
         name : Joi.string().required().min(5).max(50),
         email : Joi.string().required().min(5).max(250).email({ tlds: { allow: ['com', 'net'] } }),
-        password : Joi.string().required().min(5).max(255).pattern(/^[a-zA-Z0-9]{3,30}$/),
-        confirmPassword : Joi.any().required().valid(Joi.ref('password'))
-
+        password : Joi.string().min(5).max(255).pattern(/^[a-zA-Z0-9]{3,30}$/)
     })
 
     return schema.validate(user);
