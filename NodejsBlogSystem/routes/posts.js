@@ -88,7 +88,8 @@ router.post('/editprofile', checkAuthenticated, async(req, res, next) => {
 		  }
 		
 		  await user.update({password:req.body.password})
-		  await user.update({confirmPassword:req.body.password})
+      await user.update({address:req.body.address})
+		  await user.update({usermotto:req.body.usermotto})
       await req.flash('success_msg', "You are now edit profile")
       res.redirect('/profile')
 
