@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-12-12 17:04:42
+ * @LastEditTime: 2021-12-26 20:47:56
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \work\NodejsBlogSystem\public\js\custom.js
+ */
 console.log("Client side JS loaded... ");
 
 //loading the ck editor in body tag
@@ -49,7 +57,7 @@ const inputElement = document.querySelector('input[type="file"]');
 
 // Create the FilePond instance
 const pond = FilePond.create(inputElement, {
-  maxFileSize: "2000KB"
+  maxFileSize: "100MB"
 });
 
 FilePond.setOptions({

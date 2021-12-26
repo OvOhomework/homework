@@ -17,16 +17,18 @@ em {
 
 
 
-
 /* ======================
     File Ponds
 =========================*/
+.filepond {
+	height: 500px !important;
+}
 
 .filepond--file-action-button {
     cursor: pointer;
 }
 .filepond--drop-label {
-    height: 371px;
+    height: 500px;
     border: 3px solid rgb(80, 78, 78);
     display: flex;
     justify-content: center;
